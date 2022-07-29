@@ -6,29 +6,31 @@
 //   inline any short function
 
 #include <iostream>
+#include <vector>
 
 using namespace std;
 const int N = 40;
 
-inline void sum(int* p, int n, int d[]) {
-  *p = 0; // set sum to zero
-
-  // start collecting the acumulated sum
-  for (int i = 0; i < n; ++i) {
-    *p = *p + d[i];
+// write generic template function to sum elements of vector
+template <class T>
+inline void sum(T& sum, std::vector<T> data) {
+  for (int i = 0; i < data.size(); i++) {
+    sum += data[i];
   }
 }
 
 int main() {
 
-  // init array with increasing values
-  int data[N];
+  // init empty vector object
+  std::vector<int> data; 
+
+  // fill vector with data as needed
   for (int i = 0; i < N; ++i) {
-    data[i] = i;
+    data.push_back(i);
   }
 
   int accum = 0;
-  sum(&accum, N, data); // call inline sum function
+  sum(accum, data); // call inline sum function
 
   cout << "sum is " << accum << endl;
 
