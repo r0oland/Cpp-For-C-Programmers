@@ -5,6 +5,12 @@ Implementing Dijkstra’s algorithm requires thinking about at least three basic
 - PriorityQueue
 - ShortestPath algorithm
 
+Additionally, deciding on a scheme for naming vertices (V) is an important first step in implementation design.
+By convention, vertices are generally mapped onto the set of Integers in the range from 0 : |V| -1.  
+This provides an effective Key into sequential containers (like ARRAY) to access vertex records in constant time - Θ(1). 
+
+
+
 ### Class Graph:
 
 A potential partial interface definition for a Graph could be:
@@ -20,6 +26,11 @@ A potential partial interface definition for a Graph could be:
 - set_node_value( G, x, a): sets the value associated with the node x to a.
 - get_edge_value( G, x, y): returns the value associated to the edge (x,y).
 - set_edge_value (G, x, y, v): sets the value associated to the edge (x,y) to v.
+
+
+
+For sparse graphs, the list approach is typically more efficient, but for dense graphs, the matrix approach can be more efficient (reference an Algorithm’s source for space and time analysis). Note in some cases such as add(G, x, y) you may also want to have the edge carry along its cost. 
+Another approach could be to use (x, y) to index a cost stored in an associated array or map.
 
 ### Class PriorityQueue
 

@@ -6,97 +6,9 @@
 #include <iostream>
 #include <vector>
 
-constexpr int32_t nNodes     = 5;
-constexpr float graphDensity = 0.1f;
-
 using namespace std;
 
-class listElement {
-public:
-  listElement(int n = 0, listElement* ptr = nullptr) : d(n), next(ptr) {};
-  int d;
-  listElement* next;
 
-private:
-};
-
-class list {
-public:
-  list() : head(nullptr), cursor(nullptr) {};
-  list(const list& lst);
-  ~list();
-
-  void prepend(int n); // insert at front value n
-  int get_element() {
-    return cursor->d; // get value of cursor
-  }
-  void advance() {
-    cursor = cursor->next; // advance cursor to next element
-  }
-  void print(); // print list
-
-  // overload << for printing list on cout
-  friend ostream& operator<<(ostream& os, const list& l) {
-    listElement* ptr = l.head;
-    while (ptr != nullptr) {
-      os << ptr->d << "->";
-      ptr = ptr->next;
-    }
-    os << "NULL";
-    return os;
-  }
-
-private:
-  listElement* head; // head of the list, i.e. latest element
-  listElement* cursor;
-};
-
-list::list(const list& lst) {
-  if (lst.head == nullptr) {
-    head   = nullptr;
-    cursor = nullptr;
-  } else {
-    // setup new list element pointing to Null
-    head             = new listElement(lst.head->d);
-    cursor           = head;
-    // create temporary pointer to traverse list
-    listElement* ptr = nullptr;
-    // check if we have more to do...
-    ptr = lst.head->next;
-    while (ptr != nullptr) {
-      cursor->next = new listElement(ptr->d);
-      cursor       = cursor->next;
-      ptr          = ptr->next;
-    }
-    cursor->next = nullptr;
-  }
-}
-
-list::~list() {
-  for (cursor = head; cursor != nullptr;) {
-    cursor = head->next;
-    delete head;
-    head = cursor;
-  }
-}; // destructor
-
-
-void list::prepend(int n) {
-  if (head == nullptr) {
-    cursor = head = new listElement(n);
-  } else {
-    head = new listElement(n, head);
-  }
-}
-
-void list::print(void) {
-  listElement* ptr = head;
-  while (ptr != nullptr) {
-    cout << ptr->d << " ";
-    ptr = ptr->next;
-  }
-  cout << "###" << endl;
-}
 
 bool** create_graph(int32_t nNodes = 50, float prob = 0.5) {
   bool** graph;
