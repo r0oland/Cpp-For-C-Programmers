@@ -10,99 +10,167 @@
 using namespace std::chrono;
 using namespace std;
 
+// define limits for "length" or weight of the edges
 enum EdgeWeight { NO_CON = 0, MIN = 1, MAX = 9 };
 
-// #############################################################################
-// listElement as struct, because it has no methods and is fully public
-// #############################################################################
-// single linked list element
-struct listElement {
-  listElement(int n = 0, listElement* ptr = nullptr) : d(n), next(ptr) {};
-  int d;
-  listElement* next;
-};
+void swap(int& x, int& y); // fct declaration
 
 // #############################################################################
-// List Class and it's Methods
+// Priority Queue as vector based min heap
+// see https://www.geeksforgeeks.org/binary-heap/
+// https://youtu.be/B7hVxCmfPtM
+// using integer arithmetic (implicit flooring division, i.e. 5/2 = 2)
+// heap parent is at index (i/2)
+// left child is at index (2*i)
+// right child is at index (2*i + 1)
 // #############################################################################
-class list {
+
+class PriorityQueue {
 public:
-  list() : head(nullptr), cursor(nullptr) {};
-  list(const list& lst);
-  ~list();
+  // create simple empty priority queue
+  PriorityQueue() {
+    heap.push_back(0); // dummy element for indexing to work out
+  };
+  PriorityQueue(std::vector<int> v) {
+    heap.push_back(0); // dummy element for indexing to work out
+    for (int i = 0; i < v.size(); i++) {
+      heap.push_back(v[i]);
+    }
+    // sort entire heap to get min heap
+    Min_Heapify_Queue();
+  };
 
-  // short inline methods for better performance...
-  int get_element() {
-    return cursor->d; // get value of cursor
+  ~PriorityQueue() {};
+
+  void Print();
+
+  void Push(int value); // add new element to heap
+
+  int Size() {
+    return heap.size() - 1;
+  }; // return number of elements in the heap
+
+  // return the minimum value in the heap
+  int Top() {
+    return heap[1];
   }
 
-  void advance() {
-    cursor = cursor->next; // advance cursor to next element
-  }
-  void print(); // print list
-
-  // inline prepend for better performance
-  void prepend(int n) {
-    if (head == nullptr) {
-      cursor = head = new listElement(n);
-    } else {
-      head = new listElement(n, head);
+  void Change_Prioirity(int idx, int new_priority) {
+    idx = idx + 1; // indexing starts at 1
+    heap[idx] = new_priority;
+    // now that we have changed a priority, we need to re-heapify the heap
+    // but here we have to work our way down the heap to the bottom of the tree
+    for (int i = Parent(idx); i <= Size()/2; i++) {
+      Min_Heapify(i);
+    }
+    // now we work our way up the tree to the top of the tree
+    for (int i = Parent(idx); i > 0; i--) {
+      Min_Heapify(i);    
     }
   }
 
-  // overload << for printing list on cout
-  friend ostream& operator<<(ostream& os, const list& l) {
-    listElement* ptr = l.head;
-    while (ptr != nullptr) {
-      os << ptr->d << "->";
-      ptr = ptr->next;
+  // return the min value from the top if the heap and remove it
+  // then reorder the heap to maintain the min heap property
+  int Pop() {
+    int minVal = heap[1];
+    heap[1]    = heap.back(); // swap old value with the end of the vector
+    heap.pop_back();          // remove the end of the vector
+    Min_Heapify(1);           // reorder the heap, starting with idx 0
+    return minVal;
+  }
+
+  // turn the vector into a min heap at index i
+  void Min_Heapify(int i);
+
+  void Min_Heapify_Queue(){
+    // walk trough the heap and reorder it from the bottom up
+    // but last nodes are already in the correct order -> Size()/2
+    for (int i = Size()/2; i > 0; i--) {
+      Min_Heapify(i);
     }
-    os << "NULL";
-    return os;
   }
 
 private:
-  listElement* head; // head of the list, i.e. latest element
-  listElement* cursor;
+  vector<int> heap;
+
+  int Parent(int i) {
+    return (i) / 2;
+  }
+
+  // to get index of left child of node at index i
+  int Left(int i) {
+    return (2 * i);
+  }
+
+  // to get index of right child of node at index i
+  int Right(int i) {
+    return (2 * i + 1);
+  }
 };
 
-//------------------------------------------------------------------------------
-// copy constructor
-list::list(const list& lst) {
-  if (lst.head == nullptr) {
-    head   = nullptr;
-    cursor = nullptr;
-  } else {
-    // setup new list element pointing to Null
-    head   = new listElement(lst.head->d);
-    cursor = head;
-    // create temporary pointer to traverse list
-    listElement* ptr = nullptr;
-    // check if we have more to do...
-    ptr = lst.head->next;
-    while (ptr != nullptr) {
-      cursor->next = new listElement(ptr->d);
-      cursor       = cursor->next;
-      ptr          = ptr->next;
-    }
-    cursor->next = nullptr;
+// A recursive method to heapify a subtree with the root at given index
+// This method assumes that the subtrees are already heapified
+void PriorityQueue::Min_Heapify(int i) {
+  int l        = Left(i);
+  int r        = Right(i);
+  int smallest = i;
+
+  // tree nodes without children are already in the correct order by definition
+  if (i > Size()/2){
+    return;
+  }
+  
+  // chek if left child is smaller than parent
+  if (l < Size() && heap[l] < heap[i]) {
+    smallest = l;
+  }
+
+  // chek if right child is smaller than parent
+  if (r < Size() && heap[r] < heap[smallest]) {
+    smallest = r;
+  }
+
+  // if either child was smaller, swap with parent and recurse on the child
+  if (smallest != i) {
+    swap(heap[i], heap[smallest]);
+    Min_Heapify(smallest);
+  }
+  return;
+}
+
+// Inserts a new key 'k'
+void PriorityQueue::Push(int k) {
+  heap.push_back(k); // insert new key at the end of the vector
+  int idx = heap.size() - 1;
+  // Fix the min heap property if it is violated by working our way up the tree
+  while (idx != 1 && heap[Parent(idx)] > heap[idx]) {
+    swap(heap[idx], heap[Parent(idx)]);
+    idx = Parent(idx);
   }
 }
 
-//------------------------------------------------------------------------------
-// destructor
-list::~list() {
-
-  cout << "deleting list elements: ";
-  cursor = head;
-  while (cursor != nullptr) {
-    cout << cursor->d << "->";
-    cursor = head->next;
-    delete head;
-    head = cursor;
+void PriorityQueue::Print() {
+  int div       = 1;
+  int inLinePos = 0;
+  cout << "Heap Visualization" << endl;
+  cout << 1 << ": ";
+  for (int i = 1; i < heap.size(); i++) {
+    if ((i % (div * 2)) == 0) {
+      cout << endl;
+      div *= 2;
+      cout << div << ": ";
+      inLinePos = 0;
+    }
+    cout << heap[i];
+    inLinePos++;
+    if (inLinePos > 0 && inLinePos % 2 == 0 && i >= 4) {
+      cout << " | ";
+    } else {
+      cout << " ";
+    }
   }
-  cout << "NULL" << endl;
-};
+  cout << endl;
+}
 
 // #############################################################################
 // graph Class using Edge Matrix Representation
@@ -189,10 +257,10 @@ public:
   float Get_Density();
 
 private:
-  int n;                            // number of graph nodes / vertices
-  int nEdges;                       // number of edges
-  float density;                    // density of the graph
-  vector<vector<bool>> conMap;      // connectivity matrix
+  int n;                         // number of graph nodes / vertices
+  int nEdges;                    // number of edges
+  float density;                 // density of the graph
+  vector<vector<bool>> conMap;   // connectivity matrix
   vector<vector<int>> weightMap; // weight matrix, range 0-255
 };
 
@@ -210,7 +278,7 @@ void GraphMatrix::Print() {
       if (x == y) {
         cout << " \\ ";
       } else if (conMap[x][y]) {
-        cout << " "<< weightMap[x][y] << " ";
+        cout << " " << weightMap[x][y] << " ";
       } else {
         cout << "   ";
       }
@@ -243,7 +311,7 @@ float GraphMatrix::Get_Density() {
 }
 
 // -----------------------------------------------------------------------------
-vector<int> GraphMatrix::Get_Neighbors(int x){
+vector<int> GraphMatrix::Get_Neighbors(int x) {
   vector<int> neighbors;
   for (int i = 0; i < n; i++) {
     if (conMap[x][i]) {
@@ -254,10 +322,10 @@ vector<int> GraphMatrix::Get_Neighbors(int x){
 }
 
 // -----------------------------------------------------------------------------
-void GraphMatrix::Print_Neighbors(int x){
+void GraphMatrix::Print_Neighbors(int x) {
   vector<int> neighbors = Get_Neighbors(x);
   cout << "Neighbors of " << x << ": " << endl;
-  for (auto i: neighbors){
+  for (auto i : neighbors) {
     cout << x << "->" << weightMap[x][i] << "->" << i << endl;
   }
 }
@@ -292,7 +360,8 @@ int main() {
 
   auto startTime = high_resolution_clock::now();
 
-  cout << "Welcome to fun with Dijkstra" << endl;
+  cout << "#######################################################" << endl;
+  cout << "Welcome to fun with Graphs" << endl;
 
   GraphMatrix myGraph(10, 0.5);
   myGraph.Print();
@@ -304,12 +373,49 @@ int main() {
 
   cout << myGraph.Get_Weight(5, neighbors[0]) << endl;
 
-
-
   // bool** newGraph = create_graph(nNodes, graphDensity);
   // print_2d_graph(newGraph, nNodes);
   // print_graph_density(newGraph, nNodes);
   // cout << is_connected(newGraph, nNodes) << endl;
+  cout << "#######################################################" << endl;
+  cout << "Welcome to fun with Queues" << endl;
+
+  constexpr uint32_t N_ELEM = (2<<2)-1;
+  // init empty vector of size N_ELEM
+  vector<int> unsortedVector(N_ELEM);
+
+  for (int i = 0; i < N_ELEM; i++) {
+    unsortedVector[i] = rand() % 100;
+  }
+  PriorityQueue MyQueue(unsortedVector);
+  MyQueue.Print();
+
+  MyQueue.Push(5);
+  MyQueue.Print();
+
+  MyQueue.Push(75);
+  MyQueue.Print();
+
+
+  MyQueue.Pop();
+  MyQueue.Print();
+
+  MyQueue.Pop();
+  MyQueue.Print();
+
+  MyQueue.Change_Prioirity(0,250);
+  MyQueue.Change_Prioirity(0,250);
+  MyQueue.Change_Prioirity(0,250);
+  MyQueue.Print();
+
+  MyQueue.Change_Prioirity(5,0);
+  MyQueue.Change_Prioirity(5,0);
+  MyQueue.Change_Prioirity(5,0);
+  MyQueue.Print();
+
+
+  cout << "#######################################################" << endl;
+  cout << "Welcome to fun with Dijkstra" << endl;
 
   auto stopTime            = high_resolution_clock::now();
   duration<float> duration = stopTime - startTime;
@@ -318,4 +424,12 @@ int main() {
   cout << "Total Runtime: " << duration.count() * 1000 << " ms" << endl;
 
   return 0;
+}
+
+// util to swap two ints
+inline void swap(int& x, int& y) {
+  int temp = x;
+  x        = y;
+  y        = temp;
+  return;
 }

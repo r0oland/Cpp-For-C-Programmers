@@ -9,29 +9,6 @@ Additionally, deciding on a scheme for naming vertices (V) is an important first
 By convention, vertices are generally mapped onto the set of Integers in the range from 0 : |V| -1.  
 This provides an effective Key into sequential containers (like ARRAY) to access vertex records in constant time - Θ(1). 
 
-
-
-### Class Graph:
-
-A potential partial interface definition for a Graph could be:
-
-**methods**
-- V(G): returns the number of vertices in the graph
-- E(G): returns the number of edges in the graph
-- adjacent (G, x, y): tests whether there is an edge from node x to node y.
-- neighbors (G, x): lists all nodes y such that there is an edge from x to y.
-- add (G, x, y): adds to G the edge from x to y, if it is not there.
-- delete (G, x, y): removes the edge from x to y, if it is there.
-- get_node_value (G, x): returns the value associated with the node x.
-- set_node_value( G, x, a): sets the value associated with the node x to a.
-- get_edge_value( G, x, y): returns the value associated to the edge (x,y).
-- set_edge_value (G, x, y, v): sets the value associated to the edge (x,y) to v.
-
-
-
-For sparse graphs, the list approach is typically more efficient, but for dense graphs, the matrix approach can be more efficient (reference an Algorithm’s source for space and time analysis). Note in some cases such as add(G, x, y) you may also want to have the edge carry along its cost. 
-Another approach could be to use (x, y) to index a cost stored in an associated array or map.
-
 ### Class PriorityQueue
 
 The value of the PriorityQueue is to always have access to the vertex with the next shortest link in the shortest path calculation at the top of the queue. A typically implementation is a minHeap:
@@ -40,8 +17,7 @@ The value of the PriorityQueue is to always have access to the vertex with the n
 - minPrioirty(PQ): removes the top element of the queue.
 - contains(PQ, queue_element): does the queue contain queue_element.
 - Insert(PQ, queue_element): insert queue_element into queue
-- top(PQ):returns the top element of the queue.
-- size(PQ): return the number of queue_elements.
+
 
 ### Class ShortestPath
 
