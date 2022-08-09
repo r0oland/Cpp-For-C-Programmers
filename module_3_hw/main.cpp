@@ -1,11 +1,11 @@
 //Monte carlo simulation for calculating average shortest paths in graphs
 
-#include<cstdlib>    //random numbers, srand(), rand()
+#include<cstdlib>    // random numbers, srand(), rand()
 #include<climits>    // For Maximum integer value, INT_MAX
 #include<ctime>      // time function to use as seed, time(0)
-#include<iostream>  //c++ style output, cout
-#include<vector>    //vector
-#include<queue>     //priority_queue
+#include<iostream>  // c++ style output, cout
+#include<vector>    // vector
+#include<queue>     // priority_queue
 
 #define ID pair<int,double> //macro where first int for vertex, and second double for distance
 #define mp make_pair        // macro for make_pair

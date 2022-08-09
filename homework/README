@@ -1,0 +1,7 @@
+# Use the following command to compile the program:
+
+g++ -std=c++11 -Wc++11-extensions -o sample graph.cc main.cc
+
+# Run program:
+
+./sample
