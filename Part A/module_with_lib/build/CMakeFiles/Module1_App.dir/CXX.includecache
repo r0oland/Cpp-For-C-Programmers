@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/workspaces/Cpp-For-C-Programmers/module_1/calcLib/calc.h
+
+/workspaces/Cpp-For-C-Programmers/module_1/main.cpp
+iostream
+-
+calcLib/calc.h
+/workspaces/Cpp-For-C-Programmers/module_1/calcLib/calc.h
+

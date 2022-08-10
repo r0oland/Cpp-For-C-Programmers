@@ -1,0 +1,6 @@
+/workspaces/Cpp-For-C-Programmers/module_1/build/CMakeFiles/rebuild_cache.dir
+/workspaces/Cpp-For-C-Programmers/module_1/build/CMakeFiles/edit_cache.dir
+/workspaces/Cpp-For-C-Programmers/module_1/build/CMakeFiles/Module1_App.dir
+/workspaces/Cpp-For-C-Programmers/module_1/build/calcLib/CMakeFiles/edit_cache.dir
+/workspaces/Cpp-For-C-Programmers/module_1/build/calcLib/CMakeFiles/rebuild_cache.dir
+/workspaces/Cpp-For-C-Programmers/module_1/build/calcLib/CMakeFiles/calcLib.dir

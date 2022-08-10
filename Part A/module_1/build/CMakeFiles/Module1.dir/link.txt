@@ -1,0 +1,1 @@
+/usr/bin/c++     CMakeFiles/Module1.dir/main.cpp.o  -o Module1  calcLib/libcalcLib.a 

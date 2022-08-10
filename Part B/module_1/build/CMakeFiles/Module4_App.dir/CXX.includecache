@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/workspaces/Cpp-For-C-Programmers/Part B/module_4/main.cpp
+stdlib.h
+-
+iostream
+-
+vector
+-
+fstream
+-
+iterator
+-
+chrono
+-
+array
+-
+

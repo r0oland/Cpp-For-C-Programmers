@@ -1,0 +1,3 @@
+/workspaces/Cpp-For-C-Programmers/module_4/build/CMakeFiles/rebuild_cache.dir
+/workspaces/Cpp-For-C-Programmers/module_4/build/CMakeFiles/edit_cache.dir
+/workspaces/Cpp-For-C-Programmers/module_4/build/CMakeFiles/Module4_App.dir
