@@ -29,6 +29,11 @@ AlignTrailingComments: 'true'
 SpacesBeforeTrailingComments: 1
 
 ReflowComments:  true
+
+AlwaysBreakTemplateDeclarations: Yes
 PenaltyBreakComment: 0  # modified; was 300
+# PenaltyBreakOpenParenthesis: 1  # modified; was 0
+# PackConstructorInitializers: CurrentLine
+BreakConstructorInitializers: BeforeColon
 
 ...

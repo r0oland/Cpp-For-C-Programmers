@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/workspaces/Cpp-For-C-Programmers/Part B/module_4/main.cpp
+/workspaces/Cpp-For-C-Programmers/Part B/module_1/main.cpp
 stdlib.h
 -
 iostream
@@ -20,5 +20,9 @@ iterator
 chrono
 -
 array
+-
+cassert
+-
+algorithm
 -
 
